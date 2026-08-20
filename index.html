@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="GIR or Three Putt — golf diagnostic calculator based on Dr. Lucius Riccio's analytics. Predict score from greens in regulation and get practice insights."
+    />
+    <title>GIR or Three Putt — Golf Diagnostic Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@600;700&family=Red+Hat+Text:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@patternfly/patternfly@6.6.1/patternfly.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@patternfly/patternfly@6.6.1/patternfly-addons.css"
+    />
+    <link rel="stylesheet" href="./css/app.css" />
+  </head>
+  <body>
+    <div class="rr-page" id="page">
+      <header class="rr-hero" role="banner">
+        <span class="rr-kicker">Golf analytics diagnostic</span>
+        <h1>GIR or Three Putt</h1>
+        <p>
+          Predict your score from greens in regulation, compare it to what you
+          actually shot, and get a tailored practice recommendation — based on
+          Dr. Lucius Riccio's golf analytics models.
+        </p>
+        <p class="rr-hero-note">
+          Note: Named in honour of the eternal conflict between GIR and
+          3-putting.
+        </p>
+      </header>
+
+      <div class="rr-tabs" role="tablist" aria-label="App mode">
+        <button
+          type="button"
+          class="rr-tab"
+          role="tab"
+          id="tab-baseline"
+          data-mode="baseline"
+          aria-selected="true"
+          aria-controls="panel-calculator"
+        >
+          Baseline (GIR)
+        </button>
+        <button
+          type="button"
+          class="rr-tab"
+          role="tab"
+          id="tab-advanced"
+          data-mode="advanced"
+          aria-selected="false"
+          aria-controls="panel-calculator"
+        >
+          Advanced (GIR + putts + driving)
+        </button>
+        <button
+          type="button"
+          class="rr-tab"
+          role="tab"
+          id="tab-formulas"
+          data-mode="formulas"
+          aria-selected="false"
+          aria-controls="panel-formulas"
+        >
+          Formulas
+        </button>
+      </div>
+
+      <div id="panel-calculator">
+      <main id="panel-main" role="tabpanel" aria-labelledby="tab-baseline">
+        <div class="rr-grid">
+          <section class="rr-card" aria-labelledby="inputs-heading">
+            <h2 id="inputs-heading">Round inputs</h2>
+            <p class="rr-sub">
+              Update any field — results refresh instantly. No submit needed.
+              <span class="rr-baseline-note"
+                >Advanced unlocks putts-based scoring, Putts diff, and driving
+                diagnostics. See the Formulas tab for the maths.</span
+              >
+            </p>
+
+            <div class="rr-field">
+              <label for="actualScore">Actual score</label>
+              <input
+                id="actualScore"
+                name="actualScore"
+                type="number"
+                inputmode="numeric"
+                min="50"
+                max="150"
+                step="1"
+                value="90"
+              />
+              <span class="hint">What you posted for the round</span>
+            </div>
+
+            <div class="rr-field">
+              <label for="gir">Greens in regulation (GIR)</label>
+              <input
+                id="gir"
+                name="gir"
+                type="number"
+                inputmode="numeric"
+                min="0"
+                max="18"
+                step="1"
+                value="5"
+              />
+              <span class="hint">0–18 greens reached in regulation</span>
+            </div>
+
+            <div class="rr-advanced-only" hidden>
+              <div class="rr-field">
+                <label for="putts">Total putts</label>
+                <input
+                  id="putts"
+                  name="putts"
+                  type="number"
+                  inputmode="numeric"
+                  min="10"
+                  max="60"
+                  step="1"
+                  value="33"
+                />
+                <span class="hint"
+                  >Powers Advanced (Eq. 9) score and Putts diff (Eq. 7)</span
+                >
+              </div>
+
+              <div class="rr-driving">
+                <h3>Driving module — Fairway vs. Trouble</h3>
+                <p class="rr-sub" style="margin-bottom: 0.75rem">
+                  Categorise tee shots on par 4s and 5s (typically up to 14).
+                  Driving informs diagnostics; it does not change the predicted
+                  score formula.
+                </p>
+                <div class="rr-driving-grid">
+                  <div class="rr-field">
+                    <label for="fir">Fairways hit (FIR)</label>
+                    <input
+                      id="fir"
+                      name="fir"
+                      type="number"
+                      inputmode="numeric"
+                      min="0"
+                      max="14"
+                      step="1"
+                      value="5"
+                    />
+                    <span class="hint">In play</span>
+                  </div>
+                  <div class="rr-field">
+                    <label for="rough">Rough / first cut</label>
+                    <input
+                      id="rough"
+                      name="rough"
+                      type="number"
+                      inputmode="numeric"
+                      min="0"
+                      max="14"
+                      step="1"
+                      value="5"
+                    />
+                    <span class="hint">Safe miss</span>
+                  </div>
+                  <div class="rr-field">
+                    <label for="recovery">Recovery / penalty</label>
+                    <input
+                      id="recovery"
+                      name="recovery"
+                      type="number"
+                      inputmode="numeric"
+                      min="0"
+                      max="14"
+                      step="1"
+                      value="1"
+                    />
+                    <span class="hint">Trees, sand, hazard, OB</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="rr-driving" style="margin-top: 1rem">
+                <h3>Driver carry (profile)</h3>
+                <p class="rr-sub" style="margin-bottom: 0.75rem">
+                  Enter once — saved in this browser — to see where your carry
+                  sits vs skill brackets.
+                </p>
+                <div class="rr-unit-row">
+                  <div class="rr-field" style="margin-bottom: 0; flex: 1">
+                    <label for="driverCarry"
+                      >Carry distance (<span id="unitLabel">m</span>)</label
+                    >
+                    <input
+                      id="driverCarry"
+                      name="driverCarry"
+                      type="number"
+                      inputmode="decimal"
+                      min="100"
+                      max="400"
+                      step="1"
+                      placeholder="e.g. 210"
+                    />
+                  </div>
+                  <div
+                    class="rr-unit-toggle"
+                    role="group"
+                    aria-label="Distance unit"
+                  >
+                    <button
+                      type="button"
+                      class="rr-unit-btn"
+                      data-unit="m"
+                      aria-pressed="true"
+                    >
+                      Metres
+                    </button>
+                    <button
+                      type="button"
+                      class="rr-unit-btn"
+                      data-unit="yd"
+                      aria-pressed="false"
+                    >
+                      Yards
+                    </button>
+                  </div>
+                </div>
+                <div
+                  class="rr-distance-ladder"
+                  id="distanceLadder"
+                  aria-live="polite"
+                ></div>
+              </div>
+            </div>
+          </section>
+
+          <div class="rr-stack">
+            <section class="rr-card" aria-labelledby="results-heading">
+              <h2 id="results-heading">Diagnostic results</h2>
+              <p class="rr-sub" id="badgeDesc">
+                Your score matches your ball-striking capability.
+              </p>
+
+              <div class="rr-proxy" id="skillProxy" aria-live="polite">
+                <span class="rr-proxy-label">Played like</span>
+                <strong id="skillProxyLabel">—</strong>
+                <span class="rr-proxy-note" id="skillProxyNote"></span>
+              </div>
+
+              <div class="rr-results-top">
+                <div class="rr-stat">
+                  <span class="label">Predicted</span>
+                  <span class="value" id="predictedScore">85</span>
+                </div>
+                <div class="rr-stat">
+                  <span class="label">Differential</span>
+                  <span class="value" id="differential">+5</span>
+                </div>
+                <div class="rr-stat rr-advanced-only" id="puttsDiffStat" hidden>
+                  <span class="label">Putts diff</span>
+                  <span class="value" id="puttsDiff">—</span>
+                </div>
+                <div
+                  class="rr-badge"
+                  id="badge"
+                  data-tone="warning"
+                  aria-live="polite"
+                >
+                  Short Game Leak
+                </div>
+              </div>
+
+              <h2 style="margin-top: 0.25rem">Practice insights</h2>
+              <div class="rr-insights" id="insights" aria-live="polite"></div>
+            </section>
+          </div>
+        </div>
+
+        <div class="rr-stack rr-lower" style="margin-top: 1rem">
+          <section class="rr-card" aria-labelledby="milestones-heading">
+            <h2 id="milestones-heading">Milestone target chart</h2>
+            <p class="rr-sub">
+              Riccio GIR tiers (formula-based). Your current tier is
+              highlighted; the next milestone is illuminated.
+            </p>
+            <div class="rr-table-wrap">
+              <table class="rr-table pf-v6-c-table pf-m-compact">
+                <thead>
+                  <tr>
+                    <th scope="col">Milestone</th>
+                    <th scope="col">GIR needed</th>
+                    <th scope="col">Predicted ~</th>
+                    <th scope="col">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="milestoneBody"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="rr-card" aria-labelledby="benchmarks-heading">
+            <h2 id="benchmarks-heading">Smart target benchmarks</h2>
+            <p class="rr-sub">
+              Overlay your numbers against skill brackets. Gold markers are the
+              bracket target; fill colour shows shortfall vs meeting it.
+            </p>
+            <div class="rr-benchmarks" id="benchmarks"></div>
+          </section>
+        </div>
+      </main>
+      </div>
+
+      <section
+        id="panel-formulas"
+        class="rr-formulas"
+        role="tabpanel"
+        aria-labelledby="tab-formulas"
+        hidden
+      >
+        <article class="rr-card">
+          <h2>Formulas</h2>
+          <p class="rr-sub">
+            Reference for the Riccio models used by this calculator. Baseline and
+            Advanced tabs show the answer only — the maths lives here.
+          </p>
+
+          <div class="rr-formula-block">
+            <h3>Baseline (Eq. 1) (GIR only)</h3>
+            <p class="rr-formula-eq"><code>Score = 95 − 2 × GIR</code></p>
+            <p>
+              Riccio’s Rule. Greens in regulation are the strongest single
+              predictor of score. Used on the Baseline tab.
+            </p>
+          </div>
+
+          <div class="rr-formula-block">
+            <h3>Advanced (Eq. 9) (GIR + putts)</h3>
+            <p class="rr-formula-eq">
+              <code>Score = 58 + Putts − (4/3) × GIR</code>
+            </p>
+            <p>
+              Combines GIR with actual putts. Used on the Advanced tab when
+              putts are entered.
+            </p>
+          </div>
+
+          <div class="rr-formula-block">
+            <h3>Expected putts (Eq. 7)</h3>
+            <p class="rr-formula-eq">
+              <code>Expected Putts = 37 − (2/3) × GIR</code>
+            </p>
+            <p>
+              Expected putts given your GIR. On Advanced, the Putts diff bubble
+              shows whether you are even with, above (+), or below (−) that
+              expectation.
+            </p>
+          </div>
+
+          <p class="rr-sub" style="margin-bottom: 0">
+            Driving categories and driver carry inform practice insights and
+            skill brackets only; they do not change these score equations.
+          </p>
+        </article>
+      </section>
+
+      <footer class="rr-footer" role="contentinfo">
+        <h2>Sources &amp; attribution</h2>
+        <p>
+          Formulas and interpretive framing are drawn from Dr. Lucius J.
+          (“Lou”) Riccio’s golf analytics research.
+        </p>
+        <p>
+          Notably
+          <a
+            href="https://pubsonline.informs.org/do/10.1287/LYTX.2021.05.03/full/"
+            rel="noopener noreferrer"
+            target="_blank"
+            >Want to improve your golf game? Work on GIR</a
+          >
+          (INFORMS Analytics Magazine).
+        </p>
+        <p>
+          Additional historical context:
+          <a
+            href="https://www.heraldscotland.com/news/12094233.riccio-puts-his-rule-on-the-line/"
+            rel="noopener noreferrer"
+            target="_blank"
+            >The Herald</a
+          >,
+          <a
+            href="https://golf.com/instruction/1-golf-stat-predict-average-score-ed-oldham/"
+            rel="noopener noreferrer"
+            target="_blank"
+            >GOLF.com</a
+          >, and
+          <a
+            href="https://www.usga.org/content/usga/home-page/articles/2014/06/lou-riccios-golf-laboratory-21474868849.html"
+            rel="noopener noreferrer"
+            target="_blank"
+            >USGA</a
+          >.
+        </p>
+        <p>
+          Skill-bracket informed by data such as
+          <a
+            href="https://breakxgolf.com/golf-stats-by-handicap/"
+            rel="noopener noreferrer"
+            target="_blank"
+            >breakxgolf.com/golf-stats-by-handicap</a
+          >.
+        </p>
+        <p>
+          Driving-distance targets are informed by aggregated amateur baselines
+          from the
+          <a
+            href="https://au.arccosgolf.com/blogs/community/arccos-golf-releases-largest-ever-annual-driving-distance-report-leveraging-data-from-25-million-rounds-to-deliver-eight-year-trend-analysis-across-age-gender-and-skill-level"
+            rel="noopener noreferrer"
+            target="_blank"
+            >Arccos Annual Driving Distance Report</a
+          >.
+        </p>
+        <div class="meta">
+          <p>
+            Tech stack: HTML, CSS, JavaScript and
+            <a
+              href="https://www.patternfly.org/"
+              rel="noopener noreferrer"
+              target="_blank"
+              >PatternFly</a
+            >
+            CSS (CDN) for layout and design-system foundations, with a
+            golf-inspired emerald theme.
+          </p>
+          <p>
+            Designed to run statically on GitHub Pages — no server-side backend.
+          </p>
+          <p>
+            Licensed under the
+            <a href="./LICENSE" rel="license">Apache License 2.0</a>.
+          </p>
+          <p>This client-side web app was built with the help of AI.</p>
+        </div>
+      </footer>
+    </div>
+
+    <script type="module" src="./js/ui.js"></script>
+  </body>
+</html>
