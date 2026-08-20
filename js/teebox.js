@@ -47,7 +47,7 @@ const NODES = {
       const n =
         ctx.unit === "yd" ? YD_65 : roundNice5(yardsToMeters(YD_65));
       const unitWord = ctx.unit === "yd" ? "yards" : "metres";
-      return `Is there ${n}+ ${unitWord} of width in the landing zone between any adjacent penalty areas?`;
+      return `Is there ${n}+ ${unitWord} of width between penalty areas? Select YES if no penalty areas in play off the tee.`;
     },
     yes: "pinch",
     no: "woodClear",
@@ -163,7 +163,7 @@ const NODES = {
     result: {
       club: "tight",
       title: "Tight hole — no easy answer",
-      body: "Skip driver. Pick the club that leaves the simplest next shot.",
+      body: "This is a tough one. Skip driver. Pick the club that leaves the simplest next shot for your skill level.",
       tone: "tight",
     },
   },
@@ -181,7 +181,7 @@ function carryQuestion(ctx) {
   if (ctx.hazardMeters != null) {
     return `Closest hazard at ${h}. Can driver clear it and stay safe?`;
   }
-  return "Can you carry one-side trouble with driver and stay safe?";
+  return "Can you carry one-side of trouble with driver and stay safe?";
 }
 
 function nextClubCarryQuestion(ctx) {
@@ -189,7 +189,7 @@ function nextClubCarryQuestion(ctx) {
   if (ctx.hazardMeters != null) {
     return `Will your next club (e.g. 3-wood) carry past ${h}?`;
   }
-  return "Will your next club carry the hazard that driver cannot?";
+  return "Will your next club avoid the hazard that driver puts you at risk?";
 }
 
 /**
