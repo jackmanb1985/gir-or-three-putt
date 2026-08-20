@@ -74,6 +74,17 @@
         >
           Formulas
         </button>
+        <button
+          type="button"
+          class="rr-tab"
+          role="tab"
+          id="tab-teebox"
+          data-mode="teebox"
+          aria-selected="false"
+          aria-controls="panel-teebox"
+        >
+          Tee Box Helper
+        </button>
       </div>
 
       <div id="panel-calculator">
@@ -373,6 +384,158 @@
         </article>
       </section>
 
+      <section
+        id="panel-teebox"
+        class="rr-teebox"
+        role="tabpanel"
+        aria-labelledby="tab-teebox"
+        hidden
+      >
+        <article class="rr-card">
+          <h2>Tee Box Helper</h2>
+          <p class="rr-sub">
+            Quick Yes/No club pick for the tee. Laser penalties first. Metres
+            default — switch units anytime.
+          </p>
+          <p class="rr-teebox-attrib">
+            Based loosely on the
+            <a
+              href="https://decade.golf/"
+              rel="noopener noreferrer"
+              target="_blank"
+              >DECADE Golf</a
+            >
+            tee-box decision tree by Scott Fawcett. Not affiliated with or
+            endorsed by DECADE Golf.
+          </p>
+
+          <div class="rr-teebox-setup">
+            <div class="rr-unit-row">
+              <div class="rr-field" style="margin-bottom: 0; flex: 1">
+                <label for="teeDriverCarry"
+                  >Driver carry (<span id="teeUnitLabel">m</span>)</label
+                >
+                <input
+                  id="teeDriverCarry"
+                  type="number"
+                  inputmode="decimal"
+                  min="100"
+                  max="400"
+                  step="1"
+                  placeholder="e.g. 210"
+                />
+              </div>
+              <div
+                class="rr-unit-toggle"
+                role="group"
+                aria-label="Distance unit"
+              >
+                <button
+                  type="button"
+                  class="rr-unit-btn"
+                  data-tee-unit="m"
+                  aria-pressed="true"
+                >
+                  Metres
+                </button>
+                <button
+                  type="button"
+                  class="rr-unit-btn"
+                  data-tee-unit="yd"
+                  aria-pressed="false"
+                >
+                  Yards
+                </button>
+              </div>
+            </div>
+
+            <div class="rr-field">
+              <label for="teeHazardCarry"
+                >Closest fairway hazard carry (<span class="tee-unit-echo"
+                  >m</span
+                >)</label
+              >
+              <input
+                id="teeHazardCarry"
+                type="number"
+                inputmode="decimal"
+                min="50"
+                max="400"
+                step="1"
+                placeholder="Rangefinder to clear"
+              />
+              <span class="hint" id="teeCarryHint"
+                >Laser the closest carry hazard. Compare it to your driver
+                carry.</span
+              >
+            </div>
+            <p class="rr-teebox-tips">
+              Tip: Penalty lines first. Bunkers/waste matter for land/roll — not
+              always a penalty stroke.
+            </p>
+          </div>
+
+          <div id="teeDispersionGate" class="rr-tee-step">
+            <p class="rr-tee-question" id="teeDispersionQuestion"></p>
+            <div class="rr-tee-actions">
+              <button
+                type="button"
+                class="rr-tee-btn rr-tee-yes"
+                id="teeDispersionYes"
+              >
+                Yes
+              </button>
+              <button
+                type="button"
+                class="rr-tee-btn rr-tee-no"
+                id="teeDispersionNo"
+              >
+                No
+              </button>
+            </div>
+          </div>
+
+          <div id="teeCaution" class="rr-caution" hidden>
+            <strong>Driver dispersion is not under control.</strong>
+            Work on tightening your left–right miss before this Tee Box Helper
+            can really help you. Strategy will not save a pattern that leaks
+            into trouble. Use the Advanced tab on the score calculator —
+            fairways hit, rough / first cut, and recovery / penalty — to
+            validate it. If those numbers look ugly, you are almost certainly
+            missing fairways or finding penalty off the tee. Sort the driver
+            first.
+          </div>
+
+          <div id="teeQuestionCard" class="rr-tee-step" hidden>
+            <p class="rr-tee-question" id="teeQuestionText"></p>
+            <div class="rr-tee-actions">
+              <button type="button" class="rr-tee-btn rr-tee-yes" id="teeYes">
+                Yes
+              </button>
+              <button type="button" class="rr-tee-btn rr-tee-no" id="teeNo">
+                No
+              </button>
+            </div>
+            <div class="rr-tee-nav">
+              <button type="button" class="rr-tee-link" id="teeBack" disabled>
+                Back
+              </button>
+              <button type="button" class="rr-tee-link" id="teeRestart">
+                Restart
+              </button>
+            </div>
+          </div>
+
+          <div id="teeResultCard" class="rr-tee-result" hidden>
+            <h3 id="teeResultTitle"></h3>
+            <p id="teeResultBody"></p>
+            <button type="button" class="rr-tee-btn rr-tee-yes" id="teeRestartResult">
+              New hole
+            </button>
+          </div>
+        </article>
+      </section>
+
       <footer class="rr-footer" role="contentinfo">
         <h2>Sources &amp; attribution</h2>
         <p>
@@ -428,6 +591,17 @@
             target="_blank"
             >Arccos Annual Driving Distance Report</a
           >.
+        </p>
+        <p>
+          Tee Box Helper is based loosely on the
+          <a
+            href="https://decade.golf/"
+            rel="noopener noreferrer"
+            target="_blank"
+            >DECADE Golf</a
+          >
+          tee-box decision tree by Scott Fawcett. Not affiliated with or
+          endorsed by DECADE Golf.
         </p>
         <div class="meta">
           <p>

@@ -1,6 +1,6 @@
 # GIR or Three Putt
 
-A lightweight, mobile-first golf diagnostic calculator. Predict a round score from greens in regulation (and optionally putts), compare that prediction to what you actually shot, and get practice insights — based on Dr. Lucius Riccio’s golf analytics models.
+A lightweight, mobile-first golf diagnostic calculator. Predict a round score from greens in regulation (and optionally putts), compare that prediction to what you actually shot, get practice insights — based on Dr. Lucius Riccio’s golf analytics models — and run a Yes/No tee-club decision helper on the course.
 
 Named in honour of the eternal conflict between GIR and 3-putting.
 
@@ -8,7 +8,7 @@ Runs entirely in the browser (HTML, CSS, JavaScript). No server-side backend. Bu
 
 ## What it does
 
-Three tabs: **Baseline (GIR)**, **Advanced (GIR + putts + driving)**, and **Formulas**.
+Four tabs: **Baseline (GIR)**, **Advanced (GIR + putts + driving)**, **Formulas**, and **Tee Box Helper**.
 
 ### Baseline (GIR)
 - Predicts score with Baseline (Eq. 1): `Score = 95 − 2 × GIR`
@@ -35,9 +35,31 @@ Three tabs: **Baseline (GIR)**, **Advanced (GIR + putts + driving)**, and **Form
   - Expected putts (Eq. 7)
 - Calculator tabs show answers in bubbles — not the working equations
 
+### Tee Box Helper
+On-course Yes/No flow for choosing driver, 3-wood, or a shorter club off the tee. Based loosely on the [DECADE Golf](https://decade.golf/) tee-box decision tree by Scott Fawcett (not affiliated with or endorsed by DECADE Golf).
+
+**Setup**
+- Driver carry and closest fairway hazard carry (metres default; yards toggle)
+- Driver carry is shared with Advanced via `localStorage`
+- Live hint compares your carry to the hazard as you type
+
+**Dispersion gate (before the tree)**
+- Asks whether driver dispersion is roughly within a 40–60 m left–right window (45–65 yd), or better
+- **Yes** → continue into the decision tree
+- **No** → shows a firm advisory to tighten dispersion first (points at Advanced FIR / rough / recovery to validate), then still continues into the tree
+- Dispersion does **not** change the club recommendation result
+
+**Decision tree**
+- Starts with landing-zone width between adjacent penalty areas (~60 m / 65 yd)
+- Then fairway width in the driver land/roll zone, carry-over-hazard checks, and shorter-club options
+- Outcomes: take driver, driver with aim bias, 3-wood, shorter fairway wood / iron / hybrid, or “tight hole”
+- Burnt-in yard thresholds convert to metres and round to the nearest 5 for display
+- Driver / hazard inputs only personalise carry questions (and the setup hint); they do not auto-answer Yes/No
+
 ### Diagnostics and guidance
 - Tailored **Practice insights** from score differential, Putts diff, driving mix, and next milestone
 - Driving stats and carry inform insights and brackets only — they do **not** change predicted score
+- Tee Box Helper is strategy guidance only — it does not change predicted score either
 
 ## Skill brackets (reference)
 
@@ -83,6 +105,7 @@ Open [http://localhost:8080](http://localhost:8080).
 - **Historical context:** [The Herald](https://www.heraldscotland.com/news/12094233.riccio-puts-his-rule-on-the-line/), [GOLF.com](https://golf.com/instruction/1-golf-stat-predict-average-score-ed-oldham/), [USGA](https://www.usga.org/content/usga/home-page/articles/2014/06/lou-riccios-golf-laboratory-21474868849.html)
 - **Skill brackets:** Informed by data such as [breakxgolf.com/golf-stats-by-handicap](https://breakxgolf.com/golf-stats-by-handicap/)
 - **Driving distance targets:** [Arccos Annual Driving Distance Report](https://au.arccosgolf.com/blogs/community/arccos-golf-releases-largest-ever-annual-driving-distance-report-leveraging-data-from-25-million-rounds-to-deliver-eight-year-trend-analysis-across-age-gender-and-skill-level)
+- **Tee Box Helper:** Based loosely on the [DECADE Golf](https://decade.golf/) tee-box decision tree by Scott Fawcett (not affiliated with or endorsed by DECADE Golf)
 
 ## License
 
