@@ -110,7 +110,7 @@ body {
 
 @media (min-width: 560px) {
   .rr-tabs {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -192,7 +192,7 @@ body {
     display: inline-flex;
     grid-template-columns: none;
     width: auto;
-    max-width: 720px;
+    max-width: 960px;
     gap: 0.4rem;
     margin-bottom: 1.15rem;
   }
@@ -201,8 +201,8 @@ body {
     flex: 1 1 auto;
     min-width: 0;
     min-height: 42px;
-    padding: 0.55rem 0.9rem;
-    font-size: 0.92rem;
+    padding: 0.55rem 0.75rem;
+    font-size: 0.88rem;
     white-space: nowrap;
   }
 
@@ -779,6 +779,182 @@ body {
   margin-top: 0.75rem;
   padding-top: 0.75rem;
   border-top: 1px solid #e5ece9;
+}
+
+/* Tee Box Helper */
+.rr-teebox .rr-card {
+  max-width: none;
+  width: 100%;
+}
+
+.rr-teebox-attrib {
+  margin: 0 0 1.1rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 10px;
+  background: #f4f8f6;
+  border: 1px solid #dce8e2;
+  color: var(--rr-muted);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.rr-teebox-attrib a {
+  color: var(--rr-emerald-dark);
+  font-weight: 600;
+}
+
+.rr-teebox-setup {
+  margin-bottom: 1rem;
+}
+
+.rr-teebox-tips {
+  margin: 0.35rem 0 0;
+  font-size: 0.84rem;
+  color: var(--rr-muted);
+}
+
+.rr-caution {
+  margin: 0 0 0.85rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 10px;
+  background: #fff6e8;
+  border: 1px solid #f0d9a8;
+  color: #5c3b00;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.rr-caution strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.95rem;
+  color: #7a4e00;
+}
+
+.rr-tee-step {
+  padding: 1rem 1.05rem;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #f7fbf9 0%, #eef6f2 100%);
+  border: 1px solid #d5e5dd;
+}
+
+.rr-tee-question {
+  margin: 0 0 1rem;
+  font-size: 1.08rem;
+  font-weight: 650;
+  color: var(--rr-forest);
+  line-height: 1.4;
+  font-family: "Red Hat Display", sans-serif;
+}
+
+.rr-tee-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+}
+
+.rr-tee-btn {
+  appearance: none;
+  border: none;
+  border-radius: 10px;
+  min-height: 52px;
+  padding: 0.75rem 1rem;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.12s ease, filter 0.12s ease;
+}
+
+.rr-tee-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.03);
+}
+
+.rr-tee-btn:focus-visible {
+  outline: 3px solid rgba(11, 107, 76, 0.35);
+  outline-offset: 2px;
+}
+
+.rr-tee-yes {
+  background: var(--rr-emerald);
+  color: #fff;
+}
+
+.rr-tee-no {
+  background: #fff;
+  color: var(--rr-forest);
+  border: 1px solid #c5d8cf;
+}
+
+.rr-tee-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.85rem;
+}
+
+.rr-tee-link {
+  appearance: none;
+  background: transparent;
+  border: none;
+  padding: 0.35rem 0;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--rr-emerald-dark);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.rr-tee-link:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+.rr-tee-result {
+  padding: 1.15rem 1.1rem;
+  border-radius: 12px;
+  border: 1px solid #cfe0d7;
+  background: #f4faf7;
+}
+
+.rr-tee-result[data-tone="driver"] {
+  background: linear-gradient(180deg, #e8f6ef 0%, #d8efe4 100%);
+  border-color: #9ec9b4;
+}
+
+.rr-tee-result[data-tone="wood"] {
+  background: linear-gradient(180deg, #eef4fb 0%, #dde8f5 100%);
+  border-color: #a8bfd9;
+}
+
+.rr-tee-result[data-tone="alt"] {
+  background: linear-gradient(180deg, #f8f3e8 0%, #f0e6d2 100%);
+  border-color: #d4c19a;
+}
+
+.rr-tee-result[data-tone="tight"] {
+  background: linear-gradient(180deg, #f7ecec 0%, #efdddd 100%);
+  border-color: #d4a8a8;
+}
+
+.rr-tee-result h3 {
+  margin: 0 0 0.45rem;
+  font-size: 1.25rem;
+  color: var(--rr-forest);
+  font-family: "Red Hat Display", sans-serif;
+}
+
+.rr-tee-result p {
+  margin: 0 0 1rem;
+  color: var(--rr-ink);
+  line-height: 1.45;
+}
+
+.rr-tee-result .rr-tee-btn {
+  width: 100%;
 }
 
 @media (prefers-reduced-motion: reduce) {

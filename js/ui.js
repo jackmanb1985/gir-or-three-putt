@@ -5,12 +5,14 @@ import {
   metersToYards,
   yardsToMeters,
 } from "./calc.js";
+import { createTeeBoxHelper } from "./teebox.js";
 
 const els = {
   modeButtons: document.querySelectorAll("[data-mode]"),
   advancedBlocks: document.querySelectorAll(".rr-advanced-only"),
   panelCalculator: document.querySelector("#panel-calculator"),
   panelFormulas: document.querySelector("#panel-formulas"),
+  panelTeebox: document.querySelector("#panel-teebox"),
   actualScore: document.querySelector("#actualScore"),
   gir: document.querySelector("#gir"),
   putts: document.querySelector("#putts"),
@@ -305,7 +307,7 @@ function renderPuttsDiff(result) {
 }
 
 function render() {
-  if (mode === "formulas") return;
+  if (mode === "formulas" || mode === "teebox") return;
 
   const result = diagnose(getInputState());
 
@@ -325,35 +327,62 @@ function render() {
   renderInsights(result);
 }
 
-function setDistanceUnit(unit) {
-  const meters = getDriveMetersFromInput() ?? loadDriveMeters();
+function applyUnitLabels() {
+  const label = distanceUnit === "yd" ? "yds" : "m";
+  if (els.unitLabel) els.unitLabel.textContent = label;
+  els.unitButtons.forEach((btn) => {
+    btn.setAttribute(
+      "aria-pressed",
+      btn.dataset.unit === distanceUnit ? "true" : "false"
+    );
+  });
+  document.querySelectorAll(".tee-unit-echo").forEach((el) => {
+    el.textContent = label;
+  });
+}
+
+function setDistanceUnit(unit, { fromTee = false } = {}) {
+  const meters = fromTee
+    ? loadDriveMeters()
+    : getDriveMetersFromInput() ?? loadDriveMeters();
   distanceUnit = unit === "yd" ? "yd" : "m";
   saveUnit(distanceUnit);
-  els.unitLabel.textContent = distanceUnit === "yd" ? "yds" : "m";
-  els.unitButtons.forEach((btn) => {
-    const pressed = btn.dataset.unit === distanceUnit;
-    btn.setAttribute("aria-pressed", pressed ? "true" : "false");
-  });
-  if (meters != null) {
+  applyUnitLabels();
+  if (meters != null && els.driverCarry) {
     els.driverCarry.value = String(
       Math.round(distanceUnit === "yd" ? metersToYards(meters) : meters)
     );
   }
+  if (!fromTee) {
+    teeHelper.syncUnits();
+  }
   render();
 }
+
+const teeHelper = createTeeBoxHelper({
+  root: els.panelTeebox ?? document,
+  getUnit: () => distanceUnit,
+  setUnit: (unit) => setDistanceUnit(unit, { fromTee: true }),
+  loadDriveMeters,
+  saveDriveMeters,
+  formatDist: formatDistance,
+});
 
 function setMode(nextMode) {
   mode = nextMode;
   const isFormulas = mode === "formulas";
+  const isTeebox = mode === "teebox";
   const isAdvanced = mode === "advanced";
+  const showCalculator = !isFormulas && !isTeebox;
 
   els.modeButtons.forEach((btn) => {
     const selected = btn.dataset.mode === mode;
     btn.setAttribute("aria-selected", selected ? "true" : "false");
   });
 
-  if (els.panelCalculator) els.panelCalculator.hidden = isFormulas;
+  if (els.panelCalculator) els.panelCalculator.hidden = !showCalculator;
   if (els.panelFormulas) els.panelFormulas.hidden = !isFormulas;
+  if (els.panelTeebox) els.panelTeebox.hidden = !isTeebox;
 
   els.advancedBlocks.forEach((block) => {
     block.hidden = !isAdvanced;
@@ -364,10 +393,17 @@ function setMode(nextMode) {
       ? "tab-advanced"
       : mode === "formulas"
         ? "tab-formulas"
-        : "tab-baseline";
+        : mode === "teebox"
+          ? "tab-teebox"
+          : "tab-baseline";
   document
     .querySelector("#panel-main")
     ?.setAttribute("aria-labelledby", labelledBy);
+
+  if (isTeebox) {
+    syncCarryInputFromStorage();
+    teeHelper.activate();
+  }
 
   render();
 }
@@ -406,13 +442,7 @@ function bind() {
 }
 
 syncCarryInputFromStorage();
-els.unitLabel.textContent = distanceUnit === "yd" ? "yds" : "m";
-els.unitButtons.forEach((btn) => {
-  btn.setAttribute(
-    "aria-pressed",
-    btn.dataset.unit === distanceUnit ? "true" : "false"
-  );
-});
+applyUnitLabels();
 
 bind();
 setMode("baseline");
